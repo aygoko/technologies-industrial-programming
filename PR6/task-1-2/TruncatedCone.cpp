@@ -1,46 +1,54 @@
 #include "TruncatedCone.h"
-#include <iostream>
-#include <cmath>
+#include "cmath"
+using namespace std;
 
-// Default constructor
-TruncatedCone::TruncatedCone() : Cone() {
-    topRadius = 0;
-}
+TruncatedCone::TruncatedCone() : Cone(), r2(2) {}
 
-// Constructor with parameters
-TruncatedCone::TruncatedCone(double cx, double cy, double cz, double radius, double height, double topRadius)
-        : Cone(cx, cy, cz, radius, height), topRadius(topRadius) {}
+TruncatedCone::TruncatedCone(float x, float y, float z, float r1, float r2, float h) :
+        Cone(x, y, z, r1, h), r2(r2) {}
 
-// Calculate the surface area of the truncated cone
-double TruncatedCone::surfaceArea() const {
-    double l = sqrt(pow(topRadius - radius, 2) + pow(height, 2));
-    return M_PI * (radius + topRadius) * l + Cone::surfaceArea();
-}
-
-// Calculate the volume of the truncated cone
-double TruncatedCone::volume() const {
-    double h = height * (topRadius * topRadius + topRadius * radius + radius * radius) / (3 * (topRadius * topRadius + topRadius * radius + radius * radius - topRadius * radius));
-    double V = M_PI * h * (pow(topRadius, 2) + topRadius * radius + pow(radius, 2)) / 3.0;
-    return V;
-}
-
-// Overloaded input operator
-std::istream& operator>>(std::istream& in, TruncatedCone& c) {
-    std::cout << "Enter the center coordinates (x,y,z): ";
-    in >> c.x >> c.y >> c.z;
+void TruncatedCone::input() {
+    std::cout << "Enter the center of the base (x y z): ";
+    std::cin >> x >> y >> z;
+    std::cout << "Enter the radius of the top: ";
+    std::cin >> r2;
     std::cout << "Enter the radius of the base: ";
-    in >> c.radius;
+    std::cin >> r;
     std::cout << "Enter the height: ";
-    in >> c.height;
-    std::cout << "Enter the top radius: ";
-    in >> c.topRadius;
-    return in;
+    std::cin >> h;
 }
 
-// Overloaded output operator
-std::ostream& operator<<(std::ostream& out, const TruncatedCone& c) {
-    out << "Truncated Cone: center(" << c.x << "," << c.y << "," << c.z << "), ";
-    out << "radius = " << c.radius << ", height = " << c.height << ", top radius = " << c.topRadius << ", ";
-    out << "surface area = " << c.surfaceArea() << ", volume = " << c.volume() << std::endl;
-    return out;
+void TruncatedCone::output() const {
+    std::cout << "Truncated cone with center (" << x << ", " << y << ", " << z
+              << "), top radius " << r2 << ", base radius " << r << ", and height " << h << std::endl;
+}
+
+float TruncatedCone::surfaceArea() const {
+    float slant_height1 = std::sqrt(r * r + h * h);
+    float slant_height2 = std::sqrt(r2 * r2 + h * h);
+    return M_PI * (r + r2) * slant_height1 + M_PI * r * r - M_PI * r2 * r2;
+}
+
+float TruncatedCone::volume() const {
+    return M_PI * h * (r * r + r * r2 + r2 * r2) / 3;
+}
+
+bool TruncatedCone::operator==(const TruncatedCone& other) const {
+    return x == other.x && y == other.y && z == other.z &&
+           r == other.r && r2 == other.r2 && h == other.h;
+}
+
+bool TruncatedCone::operator!=(const TruncatedCone& other) const {
+    return !(*this == other);
+}
+
+std::ostream& operator<<(std::ostream& os, const TruncatedCone& cone) {
+    os << cone.x << " " << cone.y << " " << cone.z << " " << cone.r << " " << cone.r2 << " " << cone.h;
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, TruncatedCone& cone)
+{
+    is >> cone.x >> cone.y >> cone.z >> cone.r >> cone.r2 >> cone.h;
+    return is;
 }

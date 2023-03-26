@@ -2,7 +2,6 @@
 #include <cmath>
 
 
-
 Cone::Cone() : x(0), y(0), z(0), r(1), h(1) {}
 
 Cone::Cone(float x, float y, float z, float r, float h) :
@@ -23,8 +22,8 @@ void Cone::output() const {
 }
 
 float Cone::surfaceArea() const {
-    float slant_height = sqrt(r*r + h*h);
-    return M_PI * r * slant_height + PI * r * r;
+    float slant_height = std::sqrt(r * r + h * h);
+    return M_PI * r * slant_height + M_PI * r * r;
 }
 
 float Cone::volume() const {

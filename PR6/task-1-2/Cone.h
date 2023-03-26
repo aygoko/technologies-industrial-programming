@@ -6,15 +6,15 @@ public:
 
     Cone(float x, float y, float z, float r, float h);
 
-    virtual ~Cone() {}
+    virtual ~Cone() = default;
 
     virtual void input();
 
     virtual void output() const;
 
-    virtual float surfaceArea() const;
+    [[nodiscard]] virtual float surfaceArea() const;
 
-    virtual float volume() const;
+    [[nodiscard]] virtual float volume() const;
 
 protected:
     float x, y, z;
