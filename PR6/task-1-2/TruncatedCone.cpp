@@ -1,5 +1,4 @@
 #include "TruncatedCone.h"
-#include "TruncatedCone.h"
 #include <iostream>
 #include <cmath>
 
